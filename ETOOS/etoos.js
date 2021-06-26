@@ -35,8 +35,8 @@ const puppeteer = require('puppeteer');
     await page.waitForNavigation;
     
     // ID, PW 입력
-    await page.type('#mem_id', 'ilsan247');
-    await page.type('#pwdtmp', 'isd151208^^');
+    await page.type('#mem_id', 'id');
+    await page.type('#pwdtmp', 'pw');
     
     // 로그인 버튼 클릭
     await page.click('.btn_login');
