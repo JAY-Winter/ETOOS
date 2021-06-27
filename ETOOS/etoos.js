@@ -1,24 +1,5 @@
 
 const puppeteer = require('puppeteer');
-    function serchData(){
-        
-        let Table = '#container > div.contents > div.wrap_tbl_sdw.mgt_30';
-    
-        for(let i =2; i<12; i++){
-        page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child(i)');
-        page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child(i)');
-
-        page.waitForSelector('Table');
-
-        const data = page.evaluate(()=>{
-        
-            const tds = Array.from(document.querySelectorAll(Table));
-            return tds.map(td => td.innerText);
-
-        });
-            console.log(data)
-        }
-    }
     
 (async () => {
 
@@ -51,236 +32,251 @@ const puppeteer = require('puppeteer');
     await page.click('#m_PB200717 > a');
     await page.waitForNavigation;
     
-    // 달력 5/1 이동
-    await page.waitForSelector('#records_form > div > img:nth-child(3)');
-    await page.click('#records_form > div > img:nth-child(3)');
-    
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(7) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(7) > a');
-
-    await page.waitForSelector('#btn_search');
-    await page.click('#btn_search');    
-    await page.waitForNavigation;
-
-    for(let i =2; i<12; i++){
+    //Table 추출
+    function Table(){
+        (async()=>{
+            for(let i =2; i<12; i++){
+            
+                // page 1 ~ 10 Table 추출
+                await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+                await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
         
-        // page 1 ~ 10 Table 추출
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-
-        await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-
-    const data = await page.evaluate(()=>{
-    
-        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-        return tds.map(td => td.innerText);
-
-    });
-        console.log(data)
-
-    if(i===11){
-        // 10페이지 Table 추출 후 11페이지로 넘어감
-        await page.waitForTimeout(2000);
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-    
-        // page 11 ~ 20 Table 추출
-        for(let j=3; j<13; j++){ 
-
-            await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-            await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-    
-            await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-    
-        const data = await page.evaluate(()=>{
+                await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
         
-            const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-            return tds.map(td => td.innerText);
-    
-        });
-            console.log(data)
+                const data = await page.evaluate(()=>{
+            
+                const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+                return tds.map(td => td.innerText);
+        
+            });
+                console.log(data)
+        
+            if(i===11){
+                // 10페이지 Table 추출 후 11페이지로 넘어감
+                await page.waitForTimeout(2000);
+                await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+                await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+            
+                // page 11 ~ 20 Table 추출
+                for(let j=3; j<13; j++){ 
+        
+                    await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+                    await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+            
+                    await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+            
+                    const data = await page.evaluate(()=>{
+                
+                    const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+                    return tds.map(td => td.innerText);
+            
+                });
+                    console.log(data);
+                }
+                break;
+            }
         }
-        break;
-    }
-}
-    // 달력 5/9 이동
-    await page.waitForSelector('#records_form > div > img:nth-child(3)');
-    await page.click('#records_form > div > img:nth-child(3)');
-    
-    // 5월 9일 클릭
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(3) > td:nth-child(1) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(3) > td:nth-child(1) > a');
-
-    // 5월 16일 클릭
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(1) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(1) > a');
-
-    // 검색 
-    await page.waitForSelector('#btn_search');
-    await page.click('#btn_search');
-    await page.waitForNavigation;
-
-    
-    for(let i =2; i<12; i++){
-        
-        // page 1 ~ 10 Table 추출
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-
-        await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-
-    const data = await page.evaluate(()=>{
-    
-        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-        return tds.map(td => td.innerText);
-
-    });
-        console.log(data)
-
-    if(i===11){
-        // 10페이지 Table 추출 후 11페이지로 넘어감
-        await page.waitForTimeout(2000);
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-    
-        // page 11 ~ 20 Table 추출
-        for(let j=3; j<13; j++){ 
-
-            await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-            await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-    
-            await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-    
-        const data = await page.evaluate(()=>{
-        
-            const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-            return tds.map(td => td.innerText);
-    
         });
-            console.log(data)
-        }
-        break;
-    }
-}
-    // 달력 5/17 이동
-    await page.waitForSelector('#records_form > div > img:nth-child(3)');
-    await page.click('#records_form > div > img:nth-child(3)');
+    };
 
-    // 5월 17일 클릭
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(2) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(2) > a');
-
-    // 5월 24일 클릭
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(5) > td:nth-child(2) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(5) > td:nth-child(2) > a');
-
-    // 검색 
-    await page.waitForSelector('#btn_search');
-    await page.click('#btn_search');
-    await page.waitForNavigation;
-
-    
-    for(let i =2; i<12; i++){
+    // 달력 6/1 이동
+    function Callender_first(){
+        (async()=>{
+            //달력 click
+            await page.waitForSelector('#records_form > div > img:nth-child(3)');
+            await page.click('#records_form > div > img:nth-child(3)');
+            
+            await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a');    
+            await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a');
         
-        // page 1 ~ 10 Table 추출
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-
-        await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-
-    const data = await page.evaluate(()=>{
-    
-        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-        return tds.map(td => td.innerText);
-
-    });
-        console.log(data)
-
-    if(i===11){
-        // 10페이지 Table 추출 후 11페이지로 넘어감
-        await page.waitForTimeout(2000);
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-
-        // page 11 ~ 20 Table 추출
-        for(let j=3; j<13; j++){ 
-
-            await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-            await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-
-            await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-
-        const data = await page.evaluate(()=>{
-        
-            const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-            return tds.map(td => td.innerText);
-    
+            await page.waitForSelector('#btn_search');
+            await page.click('#btn_search');    
+            await page.waitForNavigation;
         });
-            console.log(data)
-        }
-        break;
-    }
-}
-    // 달력 5/25 이동
-    await page.waitForSelector('#records_form > div > img:nth-child(3)');
-    await page.click('#records_form > div > img:nth-child(3)');
+    
+        Table();    
+    };    
+    
+    Callender_first();
+    
+//     // 달력 6/9 이동
+//     await page.waitForSelector('#records_form > div > img:nth-child(3)');
+//     await page.click('#records_form > div > img:nth-child(3)');
+    
+//     // 6월 9일 클릭
+//     await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(4) > a');
+//     await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(4) > a');
 
-    // 5월 25일 클릭
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(5) > td:nth-child(3) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(5) > td:nth-child(3) > a');
+//     // 6월 16일 클릭
+//     await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(3) > td:nth-child(4) > a');
+//     await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(3) > td:nth-child(4) > a');
 
-    // 5월 31일 클릭
-    await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(6) > td:nth-child(2) > a');
-    await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(6) > td:nth-child(2) > a');
-
-    // 검색 
-    await page.waitForSelector('#btn_search');
-    await page.click('#btn_search');
-    await page.waitForNavigation;
+//     // 검색 
+//     await page.waitForSelector('#btn_search');
+//     await page.click('#btn_search');
+//     await page.waitForNavigation;
 
     
-    for(let i =2; i<12; i++){
+//     for(let i =2; i<12; i++){
         
-        // page 1 ~ 10 Table 추출
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+//         // page 1 ~ 10 Table 추출
+//         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+//         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
 
-        await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+//         await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
 
-    const data = await page.evaluate(()=>{
+//     const data = await page.evaluate(()=>{
     
-        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-        return tds.map(td => td.innerText);
+//         const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+//         return tds.map(td => td.innerText);
 
-    });
-        console.log(data)
+//     });
+//         console.log(data)
 
-    if(i===11){
-        // 10페이지 Table 추출 후 11페이지로 넘어감
-        await page.waitForTimeout(2000);
-        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+//     if(i===11){
+//         // 10페이지 Table 추출 후 11페이지로 넘어감
+//         await page.waitForTimeout(2000);
+//         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+//         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
     
-        // page 11 ~ 20 Table 추출
-        for(let j=3; j<13; j++){ 
+//         // page 11 ~ 20 Table 추출
+//         for(let j=3; j<13; j++){ 
 
-            await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-            await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+//             await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+//             await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
     
-            await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+//             await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
     
-        const data = await page.evaluate(()=>{
+//         const data = await page.evaluate(()=>{
         
-            const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-            return tds.map(td => td.innerText);
+//             const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+//             return tds.map(td => td.innerText);
     
-        });
-            console.log(data)
-        }
-        break;
-    }
-}
+//         });
+//             console.log(data)
+//         }
+//         break;
+//     }
+// }
+//     // 달력 6/17 이동
+//     await page.waitForSelector('#records_form > div > img:nth-child(3)');
+//     await page.click('#records_form > div > img:nth-child(3)');
 
-    await browser.close();
+//     // 6월 17일 클릭
+//     await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(3) > td:nth-child(5) > a');
+//     await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(3) > td:nth-child(5) > a');
+
+//     // 6월 24일 클릭
+//     await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(5) > a');
+//     await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(5) > a');
+
+//     // 검색 
+//     await page.waitForSelector('#btn_search');
+//     await page.click('#btn_search');
+//     await page.waitForNavigation;
+
+    
+//     for(let i =2; i<12; i++){
+        
+//         // page 1 ~ 10 Table 추출
+//         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+//         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+
+//         await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+
+//     const data = await page.evaluate(()=>{
+    
+//         const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+//         return tds.map(td => td.innerText);
+
+//     });
+//         console.log(data)
+
+//     if(i===11){
+//         // 10페이지 Table 추출 후 11페이지로 넘어감
+//         await page.waitForTimeout(2000);
+//         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+//         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+
+//         // page 11 ~ 20 Table 추출
+//         for(let j=3; j<13; j++){ 
+
+//             await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+//             await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+
+//             await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+
+//         const data = await page.evaluate(()=>{
+        
+//             const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+//             return tds.map(td => td.innerText);
+    
+//         });
+//             console.log(data)
+//         }
+//         break;
+//     }
+// }
+//     // 달력 6/25 이동
+//     await page.waitForSelector('#records_form > div > img:nth-child(3)');
+//     await page.click('#records_form > div > img:nth-child(3)');
+
+//     // 6월 25일 클릭
+//     await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(6) > a');
+//     await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(4) > td:nth-child(6) > a');
+
+//     // 6월 30일 클릭
+//     await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(5) > td:nth-child(4) > a');
+//     await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(5) > td:nth-child(4) > a');
+
+//     // 검색 
+//     await page.waitForSelector('#btn_search');
+//     await page.click('#btn_search');
+//     await page.waitForNavigation;
+
+    
+//     for(let i =2; i<12; i++){
+        
+//         // page 1 ~ 10 Table 추출
+//         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+//         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+
+//         await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+
+//     const data = await page.evaluate(()=>{
+    
+//         const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+//         return tds.map(td => td.innerText);
+
+//     });
+//         console.log(data)
+
+//     if(i===11){
+//         // 10페이지 Table 추출 후 11페이지로 넘어감
+//         await page.waitForTimeout(2000);
+//         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+//         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+    
+//         // page 11 ~ 20 Table 추출
+//         for(let j=3; j<13; j++){ 
+
+//             await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+//             await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+    
+//             await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+    
+//         const data = await page.evaluate(()=>{
+        
+//             const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+//             return tds.map(td => td.innerText);
+    
+//         });
+//             console.log(data)
+//         }
+//         break;
+//     }
+// }
+
+//     await browser.close();
     
 })();
