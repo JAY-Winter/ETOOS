@@ -1,7 +1,6 @@
-
 const puppeteer = require('puppeteer');
-    
-(async () => {
+
+(async() => {
 
     const browser = await puppeteer.launch({
 
@@ -11,32 +10,10 @@ const puppeteer = require('puppeteer');
     });
 
     const page = await browser.newPage();
-    
-    await page.goto('https://www.etoos.com/member/login.asp?returnUrl=http://247.etoos.com/lms/index.do');  
-    await page.waitForNavigation;
-    
-    // ID, PW 입력
-    await page.type('#mem_id', 'id');
-    await page.type('#pwdtmp', 'pw');
-    
-    // 로그인 버튼 클릭
-    await page.click('.btn_login');
-    await page.waitForNavigation;
-    
-    // selector 를 누르기 전 selector를 찾아야하므로 waitForSelector 를 준 다음 click
-    await page.waitForSelector('#lnbmenu > ul > li:nth-child(2) > a');
-    await page.click('#lnbmenu > ul > li:nth-child(2) > a');
-    await page.waitForTimeout(2000);
-    // waitForTimeout() 줘서 안정적으로 selector 를 찾게함
-    await page.waitForSelector('#m_PB200717 > a');
-    await page.click('#m_PB200717 > a');
-    await page.waitForNavigation;
-    
-    //Table 추출
+
     function Table(){
         (async()=>{
             for(let i =2; i<12; i++){
-            
                 // page 1 ~ 10 Table 추출
                 await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
                 await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
@@ -44,10 +21,8 @@ const puppeteer = require('puppeteer');
                 await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
         
                 const data = await page.evaluate(()=>{
-            
-                const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-                return tds.map(td => td.innerText);
-        
+                    const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+                    return tds.map(td => td.innerText);
             });
                 console.log(data)
         
@@ -66,38 +41,64 @@ const puppeteer = require('puppeteer');
                     await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
             
                     const data = await page.evaluate(()=>{
-                
-                    const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-                    return tds.map(td => td.innerText);
-            
+                        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+                        return tds.map(td => td.innerText);
                 });
-                    console.log(data);
+                    console.log(data)
                 }
                 break;
             }
         }
-        });
+        })();
     };
 
-    // 달력 6/1 이동
     function Callender_first(){
-        (async()=>{
-            //달력 click
+        // 달력 6/1 이동
+        (async() => {
+    
+            page.waitForNavigation;
+
             await page.waitForSelector('#records_form > div > img:nth-child(3)');
             await page.click('#records_form > div > img:nth-child(3)');
             
             await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a');    
             await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a');
-        
+            
+            await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(3) > a');    
+            await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(3) > a');
+            
             await page.waitForSelector('#btn_search');
             await page.click('#btn_search');    
-            await page.waitForNavigation;
-        });
+            page.waitForNavigation;
     
-        Table();    
+            await Table();
+        })();
     };    
+        
+    await page.goto('https://www.etoos.com/member/login.asp?returnUrl=http://247.etoos.com/lms/index.do');  
+    page.waitForNavigation;
     
-    Callender_first();
+    // ID, PW 입력
+    await page.type('#mem_id', 'id');
+    await page.type('#pwdtmp', 'pw');
+    
+    // 로그인 버튼 클릭
+    await page.click('.btn_login');
+    page.waitForNavigation;
+    
+    // selector 를 누르기 전 selector를 찾아야하므로 waitForSelector 를 준 다음 click
+    await page.waitForSelector('#lnbmenu > ul > li:nth-child(2) > a');
+    await page.click('#lnbmenu > ul > li:nth-child(2) > a');
+    await page.waitForTimeout(2000);
+    // waitForTimeout() 줘서 안정적으로 selector 를 찾게함
+    await page.waitForSelector('#m_PB200717 > a');
+    await page.click('#m_PB200717 > a');
+    page.waitForNavigation;
+    
+    //6/1 ~ 6/8 Table 추출
+    await Callender_first();
+
+
     
 //     // 달력 6/9 이동
 //     await page.waitForSelector('#records_form > div > img:nth-child(3)');
