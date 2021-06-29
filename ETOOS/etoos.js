@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
 
     const page = await browser.newPage();
 
-    function Table(){
+    function extract_Table(){
         (async()=>{
             for(let i =2; i<12; i++){
                 // page 1 ~ 10 Table 추출
@@ -52,26 +52,30 @@ const puppeteer = require('puppeteer');
         })();
     };
 
-    function Callender_first(){
+    function search_Callender(){
         // 달력 6/1 이동
         (async() => {
-    
-            page.waitForNavigation;
 
-            await page.waitForSelector('#records_form > div > img:nth-child(3)');
-            await page.click('#records_form > div > img:nth-child(3)');
-            
-            await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a');    
-            await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a');
-            
-            await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(3) > a');    
-            await page.click('#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(3) > a');
-            
-            await page.waitForSelector('#btn_search');
-            await page.click('#btn_search');    
-            page.waitForNavigation;
-    
-            await Table();
+            await page.waitForNavigation;
+
+            for(let x=1; x<=4; x++){
+
+                await page.waitForSelector('#records_form > div > img:nth-child(3)');
+                await page.click('#records_form > div > img:nth-child(3)');
+
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+x+') > td:nth-child('+ x+2 +') > a');    
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child'+(x)+' > td:nth-child'+(x+2)+' > a');
+
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x+1 +') > td:nth-child('+ x+2 +') > a');    
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x+1 +') > td:nth-child('+ x+2 +') > a');
+
+                await page.waitForSelector('#btn_search');
+                await page.click('#btn_search');    
+                page.waitForNavigation;
+
+                await extract_Table();
+
+            }
         })();
     };    
         
@@ -96,9 +100,9 @@ const puppeteer = require('puppeteer');
     page.waitForNavigation;
     
     //6/1 ~ 6/8 Table 추출
-    await Callender_first();
+    await search_Callender();
 
-
+    
     
 //     // 달력 6/9 이동
 //     await page.waitForSelector('#records_form > div > img:nth-child(3)');
@@ -281,3 +285,5 @@ const puppeteer = require('puppeteer');
 //     await browser.close();
     
 })();
+
+
