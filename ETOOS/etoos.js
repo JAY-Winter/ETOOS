@@ -17,9 +17,9 @@ const puppeteer = require('puppeteer');
                 // page 1 ~ 10 Table 추출
                 await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
                 await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-        
+
                 await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-        
+
                 const data = await page.evaluate(()=>{
                     const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
                     return tds.map(td => td.innerText);
@@ -45,8 +45,9 @@ const puppeteer = require('puppeteer');
                         return tds.map(td => td.innerText);
                 });
                     console.log(data)
+
+                    if(document.querySelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')') === null) break;
                 }
-                break;
             }
         }
         })();
@@ -63,11 +64,11 @@ const puppeteer = require('puppeteer');
                 await page.waitForSelector('#records_form > div > img:nth-child(3)');
                 await page.click('#records_form > div > img:nth-child(3)');
 
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+x+') > td:nth-child('+ x+2 +') > a');    
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child'+(x)+' > td:nth-child'+(x+2)+' > a');
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');    
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
 
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x+1 +') > td:nth-child('+ x+2 +') > a');    
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x+1 +') > td:nth-child('+ x+2 +') > a');
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');    
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');
 
                 await page.waitForSelector('#btn_search');
                 await page.click('#btn_search');    
