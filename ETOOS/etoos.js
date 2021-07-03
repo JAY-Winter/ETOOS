@@ -1,3 +1,21 @@
+                //bug list
+
+                // 1. 1주차 1페이지 extract_Table 진행 안함
+                // - 간헐적 오류인듯
+                // waitForTimeout 줘서 해결
+                
+                // 2. 1주차 11번 페이지에서 extract_Table 후 이런 경고가 뜸
+                //(node:39295) UnhandledPromiseRejectionWarning: ReferenceError: document is not defined
+                // 미해결
+
+                // 3. 1주차 1페이지 extract_Table 후 오류 코드 
+            
+                // (node:39577) UnhandledPromiseRejectionWarning: Error: No node found for selector: #records_form > div > img:nth-child(5)
+                // 미확인
+
+
+
+
 const puppeteer = require('puppeteer');
 
 (async() => {
@@ -45,9 +63,17 @@ const puppeteer = require('puppeteer');
                         return tds.map(td => td.innerText);    
                 });
                     console.log(data)
-                
-                    if(page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')') === null) break;
+
+                for(let k=3; k<13; k++){
+                    await page.evaluate(()=>{
+                        if(document.querySelector(`#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(4) > a`) === null) break;
+                    });
+                };
+
+                    
+
                 }
+                
             }                                                                                                                                                               
         }
         })();
@@ -84,20 +110,7 @@ const puppeteer = require('puppeteer');
 
                 await extract_Table();
 
-                //bug list
 
-                // 1. 1주차 1페이지 extract_Table 진행 안함
-                // - 간헐적 오류인듯
-                // waitForTimeout 줘서 해결
-                
-                // 2. 1주차 11번 페이지에서 extract_Table 후 이런 경고가 뜸
-                //(node:39295) UnhandledPromiseRejectionWarning: ReferenceError: document is not defined
-                // 미해결
-
-                // 3. 1주차 1페이지 extract_Table 후 오류 코드 
-            
-                // (node:39577) UnhandledPromiseRejectionWarning: Error: No node found for selector: #records_form > div > img:nth-child(5)
-                // 미확인
             }
         })();
     };    
