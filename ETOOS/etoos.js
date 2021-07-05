@@ -16,9 +16,11 @@
                 // 4. TimeoutError: waiting for selector `#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(4) > a` failed: timeout 30000ms exceeded
 
                 // 5. 주차별 1page 만 탐색하고 다음 주차로 넘어가는 오류 발생
-
+require("dotenv").config();
 const puppeteer = require('puppeteer');
 
+console.log("DB_HOST : ", process.env.DB_HOST);
+console.log("DB_HOST : ", process.env.DB_PASS);
 (async() => {
 
     const browser = await puppeteer.launch({
@@ -121,8 +123,8 @@ const puppeteer = require('puppeteer');
     page.waitForNavigation;
     await page.waitForTimeout(1000);
     // ID, PW 입력
-    await page.type('#mem_id', 'id');
-    await page.type('#pwdtmp', 'pw');
+    await page.type('#mem_id', process.env.DB_HOST);
+    await page.type('#pwdtmp', process.env.DB_PASS);
     
     // 로그인 버튼 클릭
     await page.click('.btn_login');
