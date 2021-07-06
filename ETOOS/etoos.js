@@ -20,7 +20,7 @@ require("dotenv").config();
 const puppeteer = require('puppeteer');
 
 console.log("DB_HOST : ", process.env.DB_HOST);
-console.log("DB_HOST : ", process.env.DB_PASS);
+console.log("DB_PASS : ", process.env.DB_PASS);
 (async() => {
 
     const browser = await puppeteer.launch({
@@ -46,7 +46,7 @@ console.log("DB_HOST : ", process.env.DB_PASS);
             });
                 console.log(data)
                 await page.waitForTimeout(1000);
-                // if(await page.$('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')') === null) break;
+                
 
             // 10페이지 Table 추출 후 11페이지로 넘어감
             if(i===11){
@@ -57,20 +57,24 @@ console.log("DB_HOST : ", process.env.DB_PASS);
                 
                 // page 11 ~ 20 Table 추출
                 for(let j=3; j<13; j++){ 
-                    page.waitForNavigation;
-
-                    await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-                    await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-            
-                    await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-            
-                    const data = await page.evaluate(()=>{
-                        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
-                        return tds.map(td => td.innerText);    
-                    });
-                    console.log(data);
+                    await page.waitForNavigation;
                     await page.waitForTimeout(1000);
-                    if(await page.$('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')') === null) break;
+                    await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+
+                    if(page.$('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')') === null) break;            
+                    else{
+                        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+                        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+                
+                        await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+                
+                        const data = await page.evaluate(()=>{
+                            const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
+                            return tds.map(td => td.innerText);    
+                        });
+                        await console.log(data);
+                        await page.waitForTimeout(1000);
+                    };
                 };
             };                                                                                                                                                               
         };
@@ -84,37 +88,31 @@ console.log("DB_HOST : ", process.env.DB_PASS);
             await page.waitForNavigation;
 
             for(let x=1; x<=4; x++){
-                // 달력 앞, 뒤 버튼, 검색 로딩
-                
-                await page.waitForSelector('#records_form > div > img:nth-child(5)');
-                await page.waitForSelector('#btn_search');
                 // 달력 앞 버튼 클릭
                 await page.waitForNavigation;
-                await page.waitForTimeout(4000);
                 await page.waitForSelector('#records_form > div > img:nth-child(3)');
+                await page.waitForTimeout(1500);
                 await page.click('#records_form > div > img:nth-child(3)');
-                await page.waitForTimeout(4000);
+                await page.waitForTimeout(1500);
                 // 시작 일 지정
-
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');    
-                await page.waitForTimeout(2000);
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
-                await page.waitForTimeout(2000);
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a', {waitUntil: 'networkidle0'});
+                await page.waitForTimeout(1500);
                 // 달력 뒤 버튼 클릭
+                await page.waitForSelector('#records_form > div > img:nth-child(5)');
                 await page.click('#records_form > div > img:nth-child(5)');
-                await page.waitForTimeout(2000);
+                await page.waitForTimeout(1500);
                 // 끝나는 일 지정
                 await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');    
                 await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');
-                await page.waitForTimeout(1000);
+                await page.waitForTimeout(1500);
                 // 달력 검색 버튼 클릭
+                await page.waitForSelector('#btn_search');
                 await page.click('#btn_search');    
+                
                 page.waitForNavigation;
 
                 await extract_Table();
-
-                await page.waitForTimeout(1000);
-
             }
         })();
     };    
@@ -128,8 +126,6 @@ console.log("DB_HOST : ", process.env.DB_PASS);
     
     // 로그인 버튼 클릭
     await page.click('.btn_login');
-    
-    
 
     // selector 를 누르기 전 selector를 찾아야하므로 waitForSelector 를 준 다음 click
     // waitForTimeout() 줘서 안정적으로 selector 를 찾게함
@@ -143,7 +139,7 @@ console.log("DB_HOST : ", process.env.DB_PASS);
     await page.waitForSelector('#m_PB200717 > a');
     await page.click('#m_PB200717 > a');
     
-    //6/1 ~ 6/8 Table 추출
+    //6월 Table 추출
     await search_Callender();
 
     
