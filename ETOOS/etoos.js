@@ -53,10 +53,10 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                     });                        
                     console.log(test);
 
-                    if(test = "마 지 막 페 이 지") {
-                        console.log("블랙맘바");   
-                        break;
-                    }
+                    // if(test = "마 지 막 페 이 지") {
+                        // console.log("블랙맘바");   
+                        // break;
+                    // }
 
             // 10페이지 Table 추출 후 11페이지로 넘어감
             if(i===11){
