@@ -44,9 +44,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                     const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
                     return tds.map(td => td.innerText);
             });
-                console.log(data)
-                await page.waitForTimeout(1000);
-                
+                console.log(data);
 
             // 10페이지 Table 추출 후 11페이지로 넘어감
             if(i===11){
@@ -73,8 +71,8 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                             return tds.map(td => td.innerText);    
                         });
                         await console.log(data);
-                        await page.waitForTimeout(1000);
                     };
+                    break;
                 };
             };                                                                                                                                                               
         };
@@ -96,7 +94,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                 await page.waitForTimeout(1500);
                 // 시작 일 지정
                 await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a', {waitUntil: 'networkidle0'});
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
                 await page.waitForTimeout(1500);
                 // 달력 뒤 버튼 클릭
                 await page.waitForSelector('#records_form > div > img:nth-child(5)');
@@ -113,7 +111,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                 page.waitForNavigation;
 
                 await extract_Table();
-            }
+            };
         })();
     };    
 
@@ -176,7 +174,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //         return tds.map(td => td.innerText);
 
 //     });
-//         console.log(data)
+//         console.log(data);
 
 //     if(i===11){
 //         // 10페이지 Table 추출 후 11페이지로 넘어감
@@ -198,7 +196,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //             return tds.map(td => td.innerText);
     
 //         });
-//             console.log(data)
+//             console.log(data);
 //         }
 //         break;
 //     }
@@ -220,7 +218,6 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //     await page.click('#btn_search');
 //     await page.waitForNavigation;
 
-    
 //     for(let i =2; i<12; i++){
         
 //         // page 1 ~ 10 Table 추출
@@ -235,7 +232,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //         return tds.map(td => td.innerText);
 
 //     });
-//         console.log(data)
+//         console.log(data);
 
 //     if(i===11){
 //         // 10페이지 Table 추출 후 11페이지로 넘어감
@@ -257,7 +254,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //             return tds.map(td => td.innerText);
     
 //         });
-//             console.log(data)
+//             console.log(data);
 //         }
 //         break;
 //     }
@@ -294,7 +291,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //         return tds.map(td => td.innerText);
 
 //     });
-//         console.log(data)
+//         console.log(data);
 
 //     if(i===11){
 //         // 10페이지 Table 추출 후 11페이지로 넘어감
@@ -316,7 +313,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 //             return tds.map(td => td.innerText);
     
 //         });
-//             console.log(data)
+//             console.log(data);
 //         }
 //         break;
 //     }
