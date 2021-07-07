@@ -69,20 +69,23 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
                     if(test = "마 지 막 페 이 지") {
                         console.log("블랙맘바");   
-
-                        await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-                        await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-
-                        await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-
-                        const data = await page.evaluate(()=>{
-                            const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
-                            return tds.map(td => td.innerText);    
-                        });
-                        await console.log(data);
-
                         break;
                     }
+                        else{
+                            await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+                            await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+    
+                            await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+    
+                            const data = await page.evaluate(()=>{
+                                const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
+                                return tds.map(td => td.innerText);    
+                            });
+                            await console.log(data);
+    
+                            break;
+                        };
+
                 };
             };
         };
