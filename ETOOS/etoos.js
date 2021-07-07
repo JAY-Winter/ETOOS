@@ -3,13 +3,13 @@
                 // 1. 1주차 1페이지 extract_Table 진행 안함
                 // - 간헐적 오류인듯
                 // waitForTimeout 줘서 해결
-                
+
                 // 2. 1주차 11번 페이지에서 extract_Table 후 이런 경고가 뜸
                 //(node:39295) UnhandledPromiseRejectionWarning: ReferenceError: document is not defined
                 // 미해결
 
                 // 3. 1주차 1페이지 extract_Table 후 오류 코드 
-            
+
                 // (node:39577) UnhandledPromiseRejectionWarning: Error: No node found for selector: #records_form > div > img:nth-child(5)
                 // 미확인
 
@@ -58,23 +58,33 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                     await page.waitForNavigation;
                     await page.waitForTimeout(1000);
                     await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+                    await console.log("2342");
 
-                    if(page.$('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')') === null) break;            
-                    else{
+                    let test = await page.$eval(
+                        
+                        '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+j+')', element => {
+                            return element.textContent;
+                        });                        
+                        console.log(test);
+
+                    if(test = "마 지 막 페 이 지") {
+                        console.log("블랙맘바");   
+
                         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
                         await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-                
+
                         await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-                
+
                         const data = await page.evaluate(()=>{
                             const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
                             return tds.map(td => td.innerText);    
                         });
                         await console.log(data);
-                    };
-                    break;
+
+                        break;
+                    }
                 };
-            };                                                                                                                                                               
+            };
         };
         })();
     };
@@ -101,27 +111,28 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                 await page.click('#records_form > div > img:nth-child(5)');
                 await page.waitForTimeout(1500);
                 // 끝나는 일 지정
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');    
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');
                 await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');
                 await page.waitForTimeout(1500);
                 // 달력 검색 버튼 클릭
                 await page.waitForSelector('#btn_search');
                 await page.click('#btn_search');    
-                
+
                 page.waitForNavigation;
 
                 await extract_Table();
+                await console.log("test");
             };
         })();
-    };    
+    };
 
-    await page.goto('https://www.etoos.com/member/login.asp?returnUrl=http://247.etoos.com/lms/index.do');  
+    await page.goto('https://www.etoos.com/member/login.asp?returnUrl=http://247.etoos.com/lms/index.do');
     page.waitForNavigation;
     await page.waitForTimeout(1000);
     // ID, PW 입력
     await page.type('#mem_id', process.env.DB_HOST);
     await page.type('#pwdtmp', process.env.DB_PASS);
-    
+
     // 로그인 버튼 클릭
     await page.click('.btn_login');
 
@@ -130,18 +141,16 @@ console.log("DB_PASS : ", process.env.DB_PASS);
     page.waitForNavigation;
     await page.waitForSelector('#lnbmenu > ul > li:nth-child(2) > a');
     await page.waitForTimeout(1000);
-    
+
     await page.click('#lnbmenu > ul > li:nth-child(2) > a');
     await page.waitForTimeout(1000);
-    
+
     await page.waitForSelector('#m_PB200717 > a');
     await page.click('#m_PB200717 > a');
-    
+
     //6월 Table 추출
     await search_Callender();
 
-    
-    
 //     // 달력 6/9 이동
 //     await page.waitForSelector('#records_form > div > img:nth-child(3)');
 //     await page.click('#records_form > div > img:nth-child(3)');
@@ -320,7 +329,6 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 // }
 
 //     await browser.close();
-    
 })();
 
 
