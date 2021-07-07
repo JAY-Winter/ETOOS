@@ -45,7 +45,12 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                     return tds.map(td => td.innerText);
             });
                 console.log(data);
-
+                let test = await page.$eval(
+                        
+                    '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+i+')', element => {
+                        return element.textContent;
+                    });                        
+                    console.log(test);
             // 10페이지 Table 추출 후 11페이지로 넘어감
             if(i===11){
                 
@@ -114,8 +119,8 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                 await page.click('#records_form > div > img:nth-child(5)');
                 await page.waitForTimeout(1500);
                 // 끝나는 일 지정
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2)') > a');
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2)') > a');
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2) > a');
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2) > a');
                 await page.waitForTimeout(1500);
                 // 달력 검색 버튼 클릭
                 await page.waitForSelector('#btn_search');
