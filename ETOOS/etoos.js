@@ -45,12 +45,19 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                     return tds.map(td => td.innerText);
             });
                 console.log(data);
+
                 let test = await page.$eval(
                         
                     '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+i+')', element => {
                         return element.textContent;
                     });                        
                     console.log(test);
+
+                    if(test = "마 지 막 페 이 지") {
+                        console.log("블랙맘바");   
+                        break;
+                    }
+
             // 10페이지 Table 추출 후 11페이지로 넘어감
             if(i===11){
                 
