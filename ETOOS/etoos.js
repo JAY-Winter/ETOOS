@@ -106,16 +106,16 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                 await page.click('#records_form > div > img:nth-child(3)');
                 await page.waitForTimeout(1500);
                 // 시작 일 지정
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ (x+2) +') > a');
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child(3) > a');
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child(3) > a');
                 await page.waitForTimeout(1500);
                 // 달력 뒤 버튼 클릭
                 await page.waitForSelector('#records_form > div > img:nth-child(5)');
                 await page.click('#records_form > div > img:nth-child(5)');
                 await page.waitForTimeout(1500);
                 // 끝나는 일 지정
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child('+ (x+2) +') > a');
+                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2)') > a');
+                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2)') > a');
                 await page.waitForTimeout(1500);
                 // 달력 검색 버튼 클릭
                 await page.waitForSelector('#btn_search');
