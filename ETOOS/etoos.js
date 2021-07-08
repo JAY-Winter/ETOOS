@@ -33,73 +33,77 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
     function extract_Table(){
         (async()=>{
-            for(let i=2; i<12; i++){
-                // page 1 ~ 10 Table 추출
-                await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-                await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
 
-                await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+            let count =0;
+            let p=1;
 
-                const data = await page.evaluate(()=>{
-                    const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-                    return tds.map(td => td.innerText);
-            });
-                console.log(data);
+            await page.waitForNavigation;
 
-                let test = await page.$eval(
-                        
-                    '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+i+')', element => {
-                        return element.textContent;
-                    });                        
-                    console.log(test);
+            const pageNumber = await page.$eval(
+                
+                '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+p++ +')', element => {
+                    return element.textContent;
+                });                        
+            console.log(pageNumber);
 
-                    // if(test = "마 지 막 페 이 지") {
-                        // console.log("블랙맘바");   
-                        // break;
-                    // }
+            if(pageNumber != "마지막페이지") count++;
+            else {
+                for(let i=2; i<=count+1; i++){
+                    // page 1 ~ 10 Table 추출
+                    await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+                    await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+    
+                    await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+    
+                    const data = await page.evaluate(()=>{
+                        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+                        return tds.map(td => td.innerText);
+                });
+                    console.log(data);
+            };
 
             // 10페이지 Table 추출 후 11페이지로 넘어감
-            if(i===11){
+            // if(i===11){
                 
-                await page.waitForTimeout(1000);
-                await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
-                await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+            //     await page.waitForTimeout(1000);
+            //     await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
+            //     await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a.btn_next');
                 
-                // page 11 ~ 20 Table 추출
-                for(let j=3; j<13; j++){ 
-                    await page.waitForNavigation;
-                    await page.waitForTimeout(1000);
-                    await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-                    await console.log("2342");
+            //     // page 11 ~ 20 Table 추출
+            //     for(let j=3; j<13; j++){ 
+            //         await page.waitForNavigation;
+            //         await page.waitForTimeout(1000);
+            //         await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+            //         await console.log("2342");
 
-                    let test = await page.$eval(
+            //         let test = await page.$eval(
                         
-                        '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+j+')', element => {
-                            return element.textContent;
-                        });                        
-                        console.log(test);
+            //             '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+j+')', element => {
+            //                 return element.textContent;
+            //             });                        
 
-                    if(test = "마 지 막 페 이 지") {
-                        console.log("블랙맘바");   
-                        break;
-                    }
-                        else{
-                            await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-                            await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
-    
-                            await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
-    
-                            const data = await page.evaluate(()=>{
-                                const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
-                                return tds.map(td => td.innerText);    
-                            });
-                            await console.log(data);
-    
-                            break;
-                        };
 
-                };
-            };
+            //         if(test = "마 지 막 페 이 지") {
+            //             console.log("블랙맘바");   
+            //             break;
+            //         }
+            //             else{
+            //                 await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+            //                 await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ j +')');
+    
+            //                 await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+    
+            //                 const data = await page.evaluate(()=>{
+            //                     const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30')); 
+            //                     return tds.map(td => td.innerText);    
+            //                 });
+            //                 await console.log(data);
+    
+            //                 break;
+            //             };
+
+            //     };
+            // };
         };
         })();
     };
@@ -345,5 +349,3 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
 //     await browser.close();
 })();
-
-
