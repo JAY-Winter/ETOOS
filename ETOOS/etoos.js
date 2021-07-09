@@ -35,13 +35,13 @@ console.log("DB_PASS : ", process.env.DB_PASS);
         (async()=>{
 
             let count =0;
-            let p=1;
+            
 
             await page.waitForNavigation;
-
+            const p =2;
             const pageNumber = await page.$eval(
                 
-                '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+p++ +')', element => {
+                '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ p +')', element => {
                     return element.textContent;
                 });                        
             console.log(pageNumber);
