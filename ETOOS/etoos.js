@@ -36,7 +36,6 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
             let count =0;
             
-
             await page.waitForNavigation;
             const p =2;
             const pageNumber = await page.$eval(
