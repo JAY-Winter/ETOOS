@@ -1,21 +1,4 @@
-                //bug list
 
-                // 1. 1주차 1페이지 extract_Table 진행 안함
-                // - 간헐적 오류인듯
-                // waitForTimeout 줘서 해결
-
-                // 2. 1주차 11번 페이지에서 extract_Table 후 이런 경고가 뜸
-                //(node:39295) UnhandledPromiseRejectionWarning: ReferenceError: document is not defined
-                // 미해결
-
-                // 3. 1주차 1페이지 extract_Table 후 오류 코드 
-
-                // (node:39577) UnhandledPromiseRejectionWarning: Error: No node found for selector: #records_form > div > img:nth-child(5)
-                // 미확인
-
-                // 4. TimeoutError: waiting for selector `#ui-datepicker-div > table > tbody > tr:nth-child(2) > td:nth-child(4) > a` failed: timeout 30000ms exceeded
-
-                // 5. 주차별 1page 만 탐색하고 다음 주차로 넘어가는 오류 발생
 require("dotenv").config();
 const puppeteer = require('puppeteer');
 
@@ -31,35 +14,44 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
     const page = await browser.newPage();
 
-    function extract_Table(){
-        (async()=>{
+//     function extract_pageNumber(){
+//         (async()=>{
 
-            let count =0;
+//             for(let p=2; p<12; p++){
+//                 await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ p +')');
+        
+//                 const pageNumber = await page.evaluate(()=>{
+//                     const pageNumbers = Array.from(document.querySelectorAll('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ p +')'));
+//                     return pageNumbers.map(Number => Number.innerText);
+//             });
+//             console.log(pageNumber);
+//         };
+//     });
+// };
+
+    // function extract_Table(){
+    //     (async()=>{
+
+    //         let count =0;
             
-            await page.waitForNavigation;
-            const p =2;
-            const pageNumber = await page.$eval(
-                
-                '#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ p +')', element => {
-                    return element.textContent;
-                });                        
-            console.log(pageNumber);
-
-            if(pageNumber != "마지막페이지") count++;
-            else {
-                for(let i=2; i<=count+1; i++){
-                    // page 1 ~ 10 Table 추출
-                    await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
-                    await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+    //         await page.waitForNavigation;
+            
+        
+    //         if(pageNumber != "마지막페이지") count++;
+    //         else {
+    //             for(let i=2; i<=count+1; i++){
+    //                 // page 1 ~ 10 Table 추출
+    //                 await page.waitForSelector('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
+    //                 await page.click('#container > div.contents > div.btn_area.mgt_15 > div > a:nth-child('+ i +')');
     
-                    await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
+    //                 await page.waitForSelector('#container > div.contents > div.wrap_tbl_sdw.mgt_30');
     
-                    const data = await page.evaluate(()=>{
-                        const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
-                        return tds.map(td => td.innerText);
-                });
-                    console.log(data);
-            };
+    //                 const data = await page.evaluate(()=>{
+    //                     const tds = Array.from(document.querySelectorAll('#container > div.contents > div.wrap_tbl_sdw.mgt_30'));
+    //                     return tds.map(td => td.innerText);
+    //             });
+    //                 console.log(data);
+    //         };
 
             // 10페이지 Table 추출 후 11페이지로 넘어감
             // if(i===11){
@@ -103,9 +95,9 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
             //     };
             // };
-        };
-        })();
-    };
+    //     };
+    //     })();
+    // };
 
     function search_Callender(){
         // 달력 6/1 이동
@@ -113,7 +105,7 @@ console.log("DB_PASS : ", process.env.DB_PASS);
 
             await page.waitForNavigation;
 
-            for(let x=1; x<=4; x++){
+            for(let i=1; i<=5; i++){
                 // 달력 앞 버튼 클릭
                 await page.waitForNavigation;
                 await page.waitForSelector('#records_form > div > img:nth-child(3)');
@@ -121,25 +113,47 @@ console.log("DB_PASS : ", process.env.DB_PASS);
                 await page.click('#records_form > div > img:nth-child(3)');
                 await page.waitForTimeout(1500);
                 // 시작 일 지정
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child(3) > a');
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child(3) > a');
-                await page.waitForTimeout(1500);
-                // 달력 뒤 버튼 클릭
-                await page.waitForSelector('#records_form > div > img:nth-child(5)');
-                await page.click('#records_form > div > img:nth-child(5)');
-                await page.waitForTimeout(1500);
-                // 끝나는 일 지정
-                await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2) > a');
-                await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2) > a');
-                await page.waitForTimeout(1500);
-                // 달력 검색 버튼 클릭
-                await page.waitForSelector('#btn_search');
-                await page.click('#btn_search');    
 
-                page.waitForNavigation;
 
-                await extract_Table();
-                await console.log("test");
+            for(let x=1; x<=5; x++){
+                for(let y=1; y<=7; y++){
+                    page.waitForNavigation;
+
+                    if(page.$eval('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ y +') > a').disabled = true) {
+                        console.log("This case success");
+                        break;
+                    }
+                    else {
+                        console.log("This case is abled")
+                        page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ y +') > a');
+                        page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child('+ y +') > a');
+
+                    }
+                    
+
+                };
+                
+                // #ui-datepicker-div > table > tbody > tr:nth-child(1) > td.ui-datepicker-week-end.ui-datepicker-other-month.ui-datepicker-unselectable.ui-state-disabled
+                // #ui-datepicker-div > table > tbody > tr:nth-child(1) > td:nth-child(2)
+            };
+                // await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child(3) > a');
+                // await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ x +') > td:nth-child(3) > a');
+                // await page.waitForTimeout(1500);
+                // // 달력 뒤 버튼 클릭
+                // await page.waitForSelector('#records_form > div > img:nth-child(5)');
+                // await page.click('#records_form > div > img:nth-child(5)');
+                // await page.waitForTimeout(1500);
+                // // 끝나는 일 지정
+                // await page.waitForSelector('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2) > a');
+                // await page.click('#ui-datepicker-div > table > tbody > tr:nth-child('+ (x+1) +') > td:nth-child(2) > a');
+                // await page.waitForTimeout(1500);
+                // // 달력 검색 버튼 클릭
+                // await page.waitForSelector('#btn_search');
+                // await page.click('#btn_search');    
+
+                // page.waitForNavigation;
+
+                // await extract_Table();
             };
         })();
     };
@@ -167,6 +181,8 @@ console.log("DB_PASS : ", process.env.DB_PASS);
     await page.click('#m_PB200717 > a');
 
     //6월 Table 추출
+    // await extract_pageNumber();
+
     await search_Callender();
 
 //     // 달력 6/9 이동
